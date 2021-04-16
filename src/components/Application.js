@@ -6,57 +6,6 @@ import Appointment from "components/Appointment";
 import axios from 'axios';
 import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "../helpers/selectors";
 
-// const appointments = [
-//   {
-//     id: 1,
-//     time: "12pm",
-//   },
-//   {
-//     id: 2,
-//     time: "1pm",
-//     interview: {
-//       student: "Lydia Miller-Jones",
-//       interviewer: {
-//         id: 1,
-//         name: "Sylvia Palmer",
-//         avatar: "https://i.imgur.com/LpaY82x.png",
-//       }
-//     }
-//   },
-//   {
-//     id: 3,
-//     time: "2pm",
-//   },
-//   {
-//     id: 4,
-//     time: "3pm",
-//     interview: {
-//       student: "Dr Pigarrinho",
-//       interviewer: {
-//         id: 1,
-//         name: "Sylvia Palmer",
-//         avatar: "https://i.imgur.com/LpaY82x.png",
-//       }
-//     }
-//   },
-//   {
-//     id: 5,
-//     time: "4pm",
-//   },
-//   {
-//     id: 6,
-//     time: "5pm",
-//     interview: {
-//       student: "Menino Colorido",
-//       interviewer: {
-//         id: 1,
-//         name: "Sylvia Palmer",
-//         avatar: "https://i.imgur.com/LpaY82x.png",
-//       }
-//     }
-//   }
-// ];
-
 export default function Application(props) {
   const [state, setState] = useState({
     day: "Monday",
@@ -87,15 +36,36 @@ export default function Application(props) {
   const schedule = getAppointmentsForDay(state, state.day).map((appointment) => {
     const interview = getInterview(state, appointment.interview);
     const interviewers = getInterviewersForDay(state, state.day)
+    function bookInterview(id, interview) {
+      const appointment = {
+
+        ...state.appointments[id],
+        interview: { ...interview }
+      };
+      const appointments = {
+        ...state.appointments,
+        [id]: appointment
+      };
+      setState({
+        ...state,
+        appointments
+      });
+      axios.put(`http://localhost:8001/api/appointments/${id}`, { id: id, interview: interview })
+        .then(data => console.log("data***********", data))
+    }
+
     return (
       <Appointment
         key={appointment.id}
         id={appointment.id}
         time={appointment.time}
         interview={interview}
-        interviewers={interviewers} />
+        interviewers={interviewers}
+        bookInterview={bookInterview} />
     )
   })
+
+
 
   return (
     <main className="layout">
@@ -121,7 +91,7 @@ export default function Application(props) {
       </section>
       <section className="schedule">
         {schedule}
-        < Appointment key="last" time="6pm" />
+        < Appointment key="last" time="5pm" />
       </section>
     </main>
   );
