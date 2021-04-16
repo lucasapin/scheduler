@@ -54,6 +54,20 @@ export default function Application(props) {
         .then(data => console.log("data***********", data))
     }
 
+    function deleteInterview(id) {
+      return axios.delete(`/api/appointments/${id}`)
+        .then(resp => {
+          const interview = {
+            ...state.appointments[id],
+            interview: null
+          };
+          const appointments = {
+            ...state.appointments,
+            [id]: interview
+          };
+        })
+    }
+
     return (
       <Appointment
         key={appointment.id}
@@ -61,7 +75,8 @@ export default function Application(props) {
         time={appointment.time}
         interview={interview}
         interviewers={interviewers}
-        bookInterview={bookInterview} />
+        bookInterview={bookInterview}
+        deleteInterview={deleteInterview} />
     )
   })
 

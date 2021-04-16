@@ -3,7 +3,7 @@ import InterviewerList from "components/InterviewerList";
 import Button from "components/Button";
 
 export default function Form(props) {
-  const [name, setName] = useState(props.student || "");
+  const [name, setName] = useState(props.name || "");
   const [interviewer, setInterviewer] = useState(props.interviewer || null)
 
 
@@ -29,7 +29,7 @@ export default function Form(props) {
             value={name}
             onChange={(event) => setName(event.target.value)}
             type="text"
-            placeholder="Enter a student  name"
+            placeholder={name}
             onSubmit={event => event.preventDefault()}
           /*
             This must be a controlled component
