@@ -30,13 +30,13 @@ export default function Appointment(props) {
   );
 
   // props.interview.interviewer = [];
-  function save(name, interviewer) {
+  function save(name, interviewer, create) {
     const interview = {
       student: name,
       interviewer
     };
     transition(SAVING)
-    props.bookInterview(props.id, interview)
+    props.bookInterview(props.id, interview, create)
       .then(() => transition(SHOW))
       .catch(error => transition(ERROR_SAVE, true))
   }
