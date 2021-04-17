@@ -8,7 +8,7 @@ import Status from "components/Appointment/Status";
 import useVisualMode from "../../hooks/useVisualMode";
 import Confirm from "./Confirm";
 import Error from "./Error";
-import { getInterview } from "helpers/selectors";
+
 
 
 export default function Appointment(props) {
@@ -64,8 +64,7 @@ export default function Appointment(props) {
     <article className="appointment">
       <Header time={props.time} />
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
-      {mode === CREATE && (<Form name={""}
-        interviewer={""}
+      {mode === CREATE && (<Form
         onCancel={() => back()}
         interviewers={props.interviewers}
         onSave={save}
