@@ -4,16 +4,6 @@ import axios from "axios";
 
 export default function useApplicationData() {
 
-  const confirmDay = (id) => {
-    let dayID = null;
-    for (const dayObj of state.days) {
-      if (dayObj.appointments.includes(id)) {
-        dayID = dayObj.id;
-      }
-    }
-    return dayID;
-  }
-
   let [state, setState] = useState({
     day: "Monday",
     days: [],
@@ -23,7 +13,7 @@ export default function useApplicationData() {
 
 
   React.useEffect(() => {
-    const baseUrl = "http://localhost:8001/api/"
+    const baseUrl = "/api/"
     const promiseDay = axios.get(`${baseUrl}/days`);
     const promiseAppointment = axios.get(`${baseUrl}/appointments`);
     const promiseInterviewer = axios.get(`${baseUrl}/interviewers`)
@@ -39,27 +29,33 @@ export default function useApplicationData() {
 
   const setDay = day => setState({ ...state, day });
 
+  const updateSpots = (state) => {
+    const newState = { ...state }
+    const currentDay = state.days.find(day => day.name === state.day)
+    const listOfAppointmentsForADay = currentDay.appointments
+    const emptyAppointments = listOfAppointmentsForADay.filter(appointmentId => state.appointments[appointmentId].interview === null)
+    const numberOfSpots = emptyAppointments.length
+    currentDay.spots = numberOfSpots
 
-  function bookInterview(id, interview, create = false) {
+    return newState
+  }
+
+  function bookInterview(id, interview) {
     return axios.put(`api/appointments/${id}`, { interview })
       .then(() => {
-        const int = { ...interview }
         const appointment = {
           ...state.appointments[id],
-          interview: { ...int }
+          interview
         };
         const appointments = {
           ...state.appointments,
           [id]: appointment
         };
-        const days = state.days.map(day => {
-          return (create ? day.id === confirmDay(id) ? { ...day, spots: day.spots - 1 } : { ...day } : { ...day })
+        setState(prev => {
+          const newState = { ...prev, appointments }
+          const updatedSpotState = updateSpots(newState)
+          return updatedSpotState
         })
-        setState({
-          ...state,
-          days,
-          appointments
-        });
       });
   }
 
@@ -74,9 +70,11 @@ export default function useApplicationData() {
           ...state.appointments,
           [id]: interview
         };
-        const days = state.days.map(day => {
-          return (day.id === confirmDay(id) ? { ...day, spots: day.spots + 1 } : { ...day })
-        });
+        setState(prev => {
+          const newState = { ...prev, appointments }
+          const updatedSpotState = updateSpots(newState)
+          return updatedSpotState
+        })
       })
   }
 
