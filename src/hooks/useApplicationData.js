@@ -59,7 +59,7 @@ export default function useApplicationData() {
   }
 
   function deleteInterview(id) {
-    return axios.delete(`/api/appointments/${id}`)
+    return axios.delete(`api/appointments/${id}`)
       .then(resp => {
         const interview = {
           ...state.appointments[id],
