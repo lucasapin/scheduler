@@ -41,4 +41,4 @@ npm run storybook
 !["Scheduler App for Monday."](https://github.com/lucasapin/scheduler/blob/master/docs/scheduler-home-screen.png?raw=true)
 !["One appointment created and another one in progress and spots for the day updated."](https://github.com/lucasapin/scheduler/blob/master/docs/scheduler-create-interview.png?raw=true)
 !["Delete Appointment confirmation page."](https://github.com/lucasapin/scheduler/blob/master/docs/scheduler-delete-appointment.png?raw=true)
-!["Page after deleted appointment."](https://github.com/lucasapin/scheduler/blob/master/docs/scheduler-delete-appointment.png?raw=true)
+!["Page after deleted appointment."](https://github.com/lucasapin/scheduler/blob/master/docs/scheduler-after-appointment-deleted.png?raw=true)
